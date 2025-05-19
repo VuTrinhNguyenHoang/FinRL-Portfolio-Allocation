@@ -1,0 +1,40 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+.left-panel {
+    flex: 3;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.right-panel {
+    flex: 2;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+#metrics-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#metrics-table th,
+#metrics-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#metrics-table th {
+    background-color: #f2f2f2;
+}
