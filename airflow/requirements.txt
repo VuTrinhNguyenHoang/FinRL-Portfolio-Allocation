@@ -1,0 +1,10 @@
+quantstats
+stable-baselines3
+shimmy 
+optuna 
+gymnasium
+yfinance 
+pandas 
+pandas_ta==0.3.14b0
+numpy==1.24.4
+scikit-learn
