@@ -1,0 +1,7 @@
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.log
+logs/
+airflow/logs/
+airflow/logs/scheduler/

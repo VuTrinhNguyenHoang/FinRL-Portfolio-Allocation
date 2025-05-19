@@ -65,8 +65,7 @@
       <<: *airflow-common
       command: bash -c "
           airflow db upgrade &&
-          airflow scheduler
-        "
+          airflow scheduler"
       restart: always
       networks:
         - net
@@ -83,14 +82,16 @@
       networks:
         - net
 
-    # app:
-    #   build:
-    #     context: .
-    #     dockerfile: Dockerfile
-    #   ports:
-    #     - 8000:8000
-    #   networks:
-    #     - net
+    app:
+      build:
+        context: .
+        dockerfile: app/dockerfile
+      volumes:
+        - ./airflow/dags:/opt
+      ports:
+        - 8000:8000
+      networks:
+        - net
   
   volumes:
     postgres-db-volume:
