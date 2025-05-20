@@ -4,12 +4,64 @@ async function fetchData() {
 }
 
 function drawWeights(data) {
-    const dates = data.map(r => r.Date);
     const assetKeys = Object.keys(data[0]).filter(k => k !== 'Date');
-    const traces = assetKeys.map(key => ({ x: dates, y: data.map(r => r[key]), name: key, type: 'scatter' }));
+    const traces = [];
+    
+    const colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2'];
+    
+    assetKeys.forEach((key, index) => {
+        const values = data.map(r => r[key]);
+        
+        traces.push({ 
+            x: values, 
+            type: 'histogram',
+            name: key,
+            opacity: 0.6,
+            legendgroup: key,
+            marker: {
+                color: colors[index % colors.length],
+            },
+            xbins: {
+                size: 0.05
+            },
+            histnorm: 'probability density',
+            showlegend: true
+        });
+        
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+        const step = (max - min) / 100;
+        const kdeX = Array.from({length: 101}, (_, i) => min + i * step);
+        
+        const bandwidth = 0.05;
+        const kdeY = kdeX.map(x => {
+            return values.reduce((acc, val) => {
+                return acc + Math.exp(-0.5 * Math.pow((x - val) / bandwidth, 2)) / (bandwidth * Math.sqrt(2 * Math.PI));
+            }, 0) / values.length;
+        });
+        
+        traces.push({
+            x: kdeX,
+            y: kdeY,
+            type: 'scatter',
+            mode: 'lines',
+            name: key + ' KDE',
+            line: {
+                color: colors[index % colors.length],
+                width: 2
+            },
+            legendgroup: key,
+            showlegend: false
+        });
+    });
+    
     Plotly.newPlot('chart-weights', traces, {
         margin: { t: 30 },
-        xaxis: { title: 'Date' }, yaxis: { title: 'Weight' }
+        xaxis: { title: 'Weight Value' }, 
+        yaxis: { title: 'Density' },
+        barmode: 'overlay',
+        bargap: 0.05,
+        legend: { orientation: 'h', y: -0.2 }
     });
 }
 
